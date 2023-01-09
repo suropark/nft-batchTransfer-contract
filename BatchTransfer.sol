@@ -8,6 +8,12 @@ interface ERC721Partial {
         address to,
         uint256 tokenId
     ) external;
+    
+     function safeTransferFrom(
+        address from,
+        address to,
+        uint256 tokenId
+    ) external;
 }
 
 contract BatchTransfer {
@@ -23,8 +29,9 @@ contract BatchTransfer {
         address recipient,
         uint256[] memory tokenIds
     ) external {
-        for (uint256 index; index < tokenIds.length; index++) {
-            tokenContract.transferFrom(msg.sender, recipient, tokenIds[index]);
+        uint256 length = tokenIds.length;
+        for (uint256 index; index < length; ++index) {
+            tokenContract.safeTransferFrom(msg.sender, recipient, tokenIds[index]);
         }
     }
 
@@ -35,8 +42,9 @@ contract BatchTransfer {
         uint256[] memory tokenIds
     ) external {
         require(recipients.length == tokenIds.length, "recipient length must be equal to tokenIds length");
-        for (uint256 index; index < tokenIds.length; index++) {
-            tokenContract.transferFrom(msg.sender, recipients[index], tokenIds[index]);
+        uint256 length = tokenIds.length;
+        for (uint256 index; index < length; ++index) {
+            tokenContract.safeTransferFrom(msg.sender, recipients[index], tokenIds[index]);
         }
     }
 }
